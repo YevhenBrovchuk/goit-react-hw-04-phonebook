@@ -10,14 +10,13 @@ export const App = () => {
   const [filter, setFilter] = useState('');
 
   useEffect(() => {
+    const saveContacts = () => {
+      if (contacts.length > 0) {
+        localStorage.setItem(`contacts`, JSON.stringify(contacts));
+      }
+    };
     saveContacts();
   }, [contacts]);
-
-  const saveContacts = () => {
-    if (contacts.length > 0) {
-      localStorage.setItem(`contacts`, JSON.stringify(contacts));
-    }
-  };
 
   useEffect(() => {
     setContacts(savedContacts());
@@ -25,7 +24,8 @@ export const App = () => {
 
   const savedContacts = () => {
     const listSaveContacts = JSON.parse(localStorage.getItem(`contacts`));
-    if (listSaveContacts.length > 0) return listSaveContacts;
+
+    if (listSaveContacts !== null) return listSaveContacts;
     return [];
   };
 
