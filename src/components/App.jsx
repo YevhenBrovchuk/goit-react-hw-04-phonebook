@@ -5,29 +5,17 @@ import { PhoneForm } from './phoneForm/PhoneForm';
 import { ContactList } from './contactList/ContactList';
 import { FilterContact } from './filterContact/FilterContact';
 
+const savedContacts = () => {
+  return JSON.parse(localStorage.getItem(`contacts`)) || [];
+};
+
 export const App = () => {
-  const [contacts, setContacts] = useState([]);
+  const [contacts, setContacts] = useState(savedContacts);
   const [filter, setFilter] = useState('');
 
   useEffect(() => {
-    function saveContacts() {
-      if (contacts.length > 0) {
-        localStorage.setItem(`contacts`, JSON.stringify(contacts));
-      }
-    }
-    saveContacts();
+    localStorage.setItem(`contacts`, JSON.stringify(contacts));
   }, [contacts]);
-
-  useEffect(() => {
-    setContacts(savedContacts());
-  }, []);
-
-  const savedContacts = () => {
-    const listSaveContacts = JSON.parse(localStorage.getItem(`contacts`));
-
-    if (listSaveContacts !== null) return listSaveContacts;
-    return [];
-  };
 
   const addContacts = newContact => {
     const isexsist = contacts.find(
@@ -43,7 +31,7 @@ export const App = () => {
   };
 
   const deleteContact = contactId => {
-    setContacts(contacts.filter(cont => cont.id !== contactId));
+    setContacts(prevState => prevState.filter(cont => cont.id !== contactId));
   };
 
   const changeFilter = newfilter => {
